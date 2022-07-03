@@ -20,4 +20,6 @@ const auth = (req, res, next) => {
   }
 };
 
+//auth: kiểm tra xem token còn giá trị hay không; còn giá trị thì next()
+
 module.exports = auth;

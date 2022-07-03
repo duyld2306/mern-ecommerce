@@ -7,6 +7,7 @@ const path = require("path");
 require("dotenv").config();
 const db = require("./config/db");
 const userRouter = require("./routes/user.route");
+const categoryRouter = require("./routes/category.route");
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(
 
 //Routes
 app.use("/user", userRouter);
+app.use("/category", categoryRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
