@@ -8,6 +8,7 @@ require("dotenv").config();
 const db = require("./config/db");
 const userRouter = require("./routes/user.route");
 const categoryRouter = require("./routes/category.route");
+const uploadRouter = require("./routes/upload.route");
 
 const app = express();
 
@@ -26,7 +27,8 @@ app.use(
 
 //Routes
 app.use("/user", userRouter);
-app.use("/category", categoryRouter);
+app.use("/api/category", categoryRouter);
+app.use("/api", uploadRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
