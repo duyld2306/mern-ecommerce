@@ -45,6 +45,43 @@ const userController = {
       return res.status(500).json({ msg: err.message });
     }
   },
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).json({ msg: "User does not exist." });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ msg: "Incorrect password." });
+      }
+
+      // If login success, create access token and refresh token
+      const accessToken = createAccessToken({ id: user._id });
+      const refreshToken = createRefreshToken({ id: user._id });
+
+      res.cookie("refreshtoken", refreshToken, {
+        httpOnly: true,
+        path: "/user/refresh_token",
+        maxAge: 7 * 24 * 60 * 60 * 1000, // 7d
+      });
+
+      return res.status(200).json({ accessToken });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  logout: async (req, res) => {
+    try {
+      res.clearCookie("refreshtoken", { path: "/user/refresh_token" });
+      return res.status(200).json({ msg: "Logged out!" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
   refreshToken: (req, res) => {
     try {
       const rf_token = req.cookies.refreshtoken;
@@ -57,8 +94,19 @@ const userController = {
           return res.status(400).json({ msg: "Please login or register!" });
         }
         const newAccessToken = createAccessToken({ id: user.id });
-        return res.status(200).json({ user, newAccessToken });
+        return res.status(200).json({ newAccessToken });
       });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  getUser: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id).select("-password");
+      if (!user) {
+        return res.status(400).json({ msg: "User does not exist." });
+      }
+      return res.status(200).json(user);
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }
