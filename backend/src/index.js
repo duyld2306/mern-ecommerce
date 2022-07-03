@@ -1,11 +1,12 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
+var morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 require("dotenv").config();
 const db = require("./config/db");
+const userRouter = require("./routes/user.route");
 
 const app = express();
 
@@ -15,15 +16,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
+app.use(morgan("common"));
 app.use(
   fileUpload({
     useTempFiles: true,
   })
 );
 
-app.get("/", (req, res) => {
-  res.json({ msg: "welcome!" });
-});
+//Routes
+app.use("/user", userRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
