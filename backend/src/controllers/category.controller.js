@@ -20,7 +20,7 @@ const categoryController = {
       }
       const newCategory = new Category({ name: name });
       await newCategory.save();
-      res.status(200).json({ msg: "Created a category" });
+      return res.status(200).json({ msg: "Created a category" });
     } catch (err) {
       return res.status(500).json({ msg: err.message });
     }

@@ -9,6 +9,7 @@ const db = require("./config/db");
 const userRouter = require("./routes/user.route");
 const categoryRouter = require("./routes/category.route");
 const uploadRouter = require("./routes/upload.route");
+const productRouter = require("./routes/product.route");
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use(
 app.use("/user", userRouter);
 app.use("/api/category", categoryRouter);
 app.use("/api", uploadRouter);
+app.use("/api/product", productRouter);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
