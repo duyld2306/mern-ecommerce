@@ -7,3 +7,7 @@
 
 //ẩn file .env khi đẩy lên github
 // git rm --cached .env
+
+
+//---------------------------------------------------------------
+//account paypal: sb-9py2118290057@personal.example.com / vM9kT_)7

@@ -1,0 +1,60 @@
+.cart {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  padding: 50px;
+  font-size: 150%;
+  border: 1px solid #ccc;
+  transform: scaleY(0.98);
+
+  img {
+    max-width: 400px;
+    width: 100%;
+    margin: 20px;
+    height: 450px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .box-detail {
+    max-width: 500px;
+    width: 100%;
+    margin: 5px 20px;
+
+    .amount {
+      button {
+        width: 40px;
+        height: 40px;
+        border: 1px solid #777;
+      }
+
+      span {
+        color: crimson;
+        padding: 0 20px;
+      }
+    }
+
+    .delete {
+      position: absolute;
+      top: 0;
+      right: 5px;
+      color: crimson;
+      font-weight: 900;
+      cursor: pointer;
+    }
+  }
+}
+
+.total {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h3 {
+    color: crimson;
+  }
+}

@@ -14,10 +14,13 @@ class APIfeatures {
     excludedFields.forEach((el) => delete queryObj[el]);
 
     let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(
-      /\b(gte|gt|lt|lte|regex)\b/g,
-      (match) => "$" + match
-    );
+    if (queryStr.includes("regex")) {
+      queryStr = queryStr.replace(
+        /\b(regex)\b/g,
+        (match) => `$options": "i", "$` + match
+      );
+    }
+    queryStr = queryStr.replace(/\b(gte|gt|lt|lte)\b/g, (match) => "$" + match);
     //    gte = greater than or equal(lớn hơn hoặc bằng)
     //    lte = lesser than or equal(nhỏ hơn hoặc bằng)
     //    lt = lesser than(nhỏ hơn)
@@ -38,7 +41,7 @@ class APIfeatures {
 
   paginating() {
     const page = this.queryString.page * 1 || 1; //trang số mấy
-    const limit = this.queryString.limit * 1 || 3; //số phần tử trong 1 trang
+    const limit = this.queryString.limit * 1 || 9; //số phần tử trong 1 trang
     const skip = (page - 1) * limit;
     this.query = this.query.skip(skip).limit(limit);
     return this;
@@ -86,7 +89,7 @@ const productController = {
 
       const newProduct = new Product({
         product_id,
-        title: title.toLowerCase(),
+        title,
         price,
         description,
         content,
@@ -118,7 +121,7 @@ const productController = {
       await Product.findOneAndUpdate(
         { _id: req.params.id },
         {
-          title: title.toLowerCase(),
+          title,
           price,
           description,
           content,

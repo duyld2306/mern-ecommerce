@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 require("dotenv").config();
 const User = require("../models/User.model");
+const Payment = require("../models/Payment.model");
 
 const userController = {
   register: async (req, res) => {
@@ -111,10 +112,34 @@ const userController = {
       return res.status(500).json({ msg: err.message });
     }
   },
+  addCart: async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      if (!user) {
+        return res.status(400).json({ msg: "User does not exist." });
+      }
+
+      await User.findOneAndUpdate(
+        { _id: req.user.id },
+        { cart: req.body.cart }
+      );
+      return res.status(200).json({ msg: "Added to cart" });
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
+  history: async (req, res) => {
+    try {
+      const history = await Payment.find({ user_id: req.user.id });
+      return res.status(200).json(history);
+    } catch (err) {
+      return res.status(500).json({ msg: err.message });
+    }
+  },
 };
 
 const createAccessToken = (user) => {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "1d" });
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: "15m" });
 };
 
 const createRefreshToken = (user) => {
